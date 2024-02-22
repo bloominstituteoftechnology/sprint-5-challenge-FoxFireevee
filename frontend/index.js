@@ -37,7 +37,7 @@ async function sprintChallenge5() { // Note the async keyword, in case you wish 
     return {...learner, mentors: mentorNames}
   });
 
-  console.log(learnersWithMentors);
+  // console.log(learnersWithMentors);
 
   // info tag change informing there is no learner selected
   const info = document.querySelector('.info');
@@ -45,8 +45,6 @@ async function sprintChallenge5() { // Note the async keyword, in case you wish 
 
   // Selected Elements
   const cards = document.querySelector('.cards');
-  const body = document.querySelector('body');
-  const selected = document.querySelector('.card')
 
   // function to make each learner card
   const cardCreator = learnersWithMentors.forEach((learner) => {
@@ -64,28 +62,41 @@ async function sprintChallenge5() { // Note the async keyword, in case you wish 
     learnerMentors.textContent = 'Mentors';
 
     const ul = document.createElement('ul');
-    const liOne = document.createElement('li');
-    const liTwo = document.createElement('li');
-    liOne.textContent = `${learner.mentors[0]}`;
-    liTwo.textContent = `${learner.mentors[1]}`;
-    console.log(liOne);
-    ul.appendChild(liOne);
-    ul.appendChild(liTwo);
+
+    learner.mentors.forEach((mentor) => {
+      const li = document.createElement('li');
+      li.textContent = `${mentor}`;
+      ul.appendChild(li);
+    });
+    
+    // const liOne = document.createElement('li');
+    // const liTwo = document.createElement('li');
+    // liOne.textContent = `${learner.mentors[0]}`;
+    // liTwo.textContent = `${learner.mentors[1]}`;
+    // console.log(liOne);
+    // ul.appendChild(liOne);
+    // ul.appendChild(liTwo);
     learnerMentors.before(ul);
 
 
     card.appendChild(learnerName);
     card.appendChild(learnerEmail);
     card.appendChild(learnerMentors);
-    // card.appendChild(ul);
+    card.appendChild(ul);
     cards.appendChild(card);
 
     //selecting and deselecting cards by clicking the card
     card.addEventListener('click', () => {
+      const selected = document.querySelectorAll('.card.selected');
+      console.log(selected);
       if(card.classList.length === 1) {
+        selected.forEach((selCard) => {
+          selCard.classList.remove('selected');
+        })
         card.classList.add('selected');
         learnerName.textContent = `${learner.fullName}, ID ${learner.id}`;
         info.textContent = `The selected learner is ${learner.fullName}`;
+        console.log(card.classList);
       } else if(card.classList[1] === 'selected') {
         card.classList.remove('selected');
         learnerName.textContent = `${learner.fullName}`;
@@ -98,16 +109,18 @@ async function sprintChallenge5() { // Note the async keyword, in case you wish 
       learnerMentors.addEventListener('click', () => {
       console.log(learnerMentors.classList);
       if(learnerMentors.classList[0] === 'closed') {
+        console.log(learnerMentors.classList[0]);
         learnerMentors.classList.remove('closed');
         learnerMentors.classList.add('open');
+        card.appendChild(ul);
       } else if(learnerMentors.classList[0] === 'open') {
         learnerMentors.classList.remove('open');
         learnerMentors.classList.add('closed');
+        // card.removeChild(ul);
       }
     });
   })
 
-    //deselecting cards by clicking the document
     
 
     
